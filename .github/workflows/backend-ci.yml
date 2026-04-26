@@ -1,0 +1,72 @@
+# Name shown in the GitHub Actions tab
+name: Backend CI
+
+# Controls when this workflow runs
+on:
+  # Run when code is pushed
+  push:
+    paths:
+      # Only run when backend files change
+      - "apps/backend/**"
+
+      # Also run when this workflow changes
+      - ".github/workflows/backend-ci.yml"
+
+  # Run when pull requests affect backend files
+  pull_request:
+    paths:
+      - "apps/backend/**"
+
+# Jobs are groups of automated steps
+jobs:
+  # Job name
+  backend-check:
+    # Use latest Ubuntu GitHub runner
+    runs-on: ubuntu-latest
+
+    # Steps run from top to bottom
+    steps:
+      # Download your repository code into the runner
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install Python on the runner
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          # Match your Docker Python version
+          python-version: "3.12"
+
+      # Install backend dependencies
+      - name: Install backend dependencies
+        working-directory: apps/backend
+        run: |
+          # Upgrade pip
+          python -m pip install --upgrade pip
+
+          # Install Django and backend packages
+          pip install -r requirements.txt
+
+      # Run Django system checks
+      - name: Run Django check
+        working-directory: apps/backend
+        env:
+          # Temporary CI secret for Django check only
+          DJANGO_SECRET_KEY: ci-test-secret
+
+          # Enable debug for CI validation
+          DJANGO_DEBUG: "True"
+
+          # Use SQLite-style fallback? No, your settings use PostgreSQL.
+          # For now, we provide values but will improve DB testing later.
+          POSTGRES_DB: digi2
+          POSTGRES_USER: digi2_user
+          POSTGRES_PASSWORD: digi2_password
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+
+          # Allow local CI host
+          DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+        run: |
+          # Check Django project configuration
+          python manage.py check
