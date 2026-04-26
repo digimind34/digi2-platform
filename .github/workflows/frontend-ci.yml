@@ -1,61 +1,45 @@
-# Name shown in the GitHub Actions tab
 name: Frontend CI
 
-# Decide when this workflow should run
 on:
-  # Run when code is pushed
   push:
     paths:
-      # Run only when frontend files change
       - "apps/frontend/**"
-
-      # Also run if this workflow file changes
       - ".github/workflows/frontend-ci.yml"
 
-  # Run when a pull request changes frontend files
   pull_request:
     paths:
       - "apps/frontend/**"
 
-# Jobs are groups of automated steps
 jobs:
-  # Name of this job
   frontend-build:
-    # Use GitHub's Ubuntu machine
     runs-on: ubuntu-latest
 
-    # Steps run from top to bottom
     steps:
-      # Download your repository code into GitHub runner
+      # Step 1: Get code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install Node.js for Next.js
+      # Step 2: Install Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          # Match your project Node version
           node-version: "22"
 
-          # Cache npm dependencies for faster future builds
-          cache: "npm"
-
-          # Tell GitHub where frontend package-lock.json is located
-          cache-dependency-path: apps/frontend/package-lock.json
-
-      # Install frontend dependencies
-      - name: Install frontend dependencies
+      # Step 3: Install dependencies
+      - name: Install dependencies
         working-directory: apps/frontend
         run: |
-          # Install dependencies from package.json
           npm install
 
-      # Build the Next.js frontend
+      # Step 4: Build Next.js
       - name: Build frontend
         working-directory: apps/frontend
         env:
-          # API URL used during the build process
           NEXT_PUBLIC_API_URL: http://localhost:8000/api
         run: |
-          # Build production-ready Next.js app
           npm run build
+
+      # Step 5: Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t digi2-frontend:test apps/frontend
