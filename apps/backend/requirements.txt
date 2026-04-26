@@ -1,0 +1,17 @@
+# Main Django framework
+Django==5.1.4
+
+# Toolkit for building REST APIs in Django
+djangorestframework==3.15.2
+
+# Allows frontend requests from Next.js to Django
+django-cors-headers==4.6.0
+
+# PostgreSQL database driver for Django
+psycopg2-binary==2.9.10
+
+# Production-ready Python web server
+gunicorn==23.0.0
+
+# Allows reading environment variables from .env files
+python-dotenv==1.0.1

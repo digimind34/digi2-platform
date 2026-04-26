@@ -1,0 +1,78 @@
+# Defines all local services needed for Digi2 development
+services:
+
+  # PostgreSQL database container
+  db:
+    image: postgres:16
+    container_name: digi2-db
+
+    # Environment variables used by PostgreSQL on first startup
+    environment:
+      POSTGRES_DB: digi2
+      POSTGRES_USER: digi2_user
+      POSTGRES_PASSWORD: digi2_password
+
+    # Exposes PostgreSQL to your computer for debugging
+    ports:
+      - "5433:5432"
+
+    # Keeps database data even if the container stops
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Django REST API backend container
+  backend:
+    build:
+      context: ./apps/backend
+
+    container_name: digi2-backend
+
+    # Starts Django development server
+    command: python manage.py runserver 0.0.0.0:8000
+
+    # Mounts backend source code into the container
+    volumes:
+      - ./apps/backend:/app
+
+    # Exposes backend API on localhost:8000
+    ports:
+      - "8000:8000"
+
+    # Loads variables from .env
+    env_file:
+      - .env
+
+    # Backend starts after database container
+    depends_on:
+      - db
+
+  # Next.js frontend container
+  frontend:
+    build:
+      context: ./apps/frontend
+
+    container_name: digi2-frontend
+
+    # Starts Next.js development server
+    command: npm run dev
+
+    # Mounts frontend source code into the container
+    volumes:
+      - ./apps/frontend:/app
+      - /app/node_modules
+
+    # Exposes frontend on localhost:3000
+    ports:
+      - "3000:3000"
+
+    # Loads frontend environment variables
+    env_file:
+      - .env
+
+    # Frontend starts after backend container
+    depends_on:
+      - backend
+
+# Named Docker volume for database persistence
+volumes:
+  postgres_data:

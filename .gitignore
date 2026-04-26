@@ -1,0 +1,31 @@
+# Ignore local environment secrets
+.env
+
+# Ignore Python virtual environments if created locally
+venv/
+.venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore Django local database if ever used
+db.sqlite3
+
+# Ignore Node dependencies
+node_modules/
+
+# Ignore Next.js build output
+.next/
+out/
+
+# Ignore Terraform local state files
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Ignore OS/editor files
+.DS_Store
+.vscode/
+.idea/
