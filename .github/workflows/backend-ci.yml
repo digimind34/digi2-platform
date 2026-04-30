@@ -67,5 +67,7 @@ jobs:
       # Step 5: Build backend Docker image
       - name: Build backend Docker image
         run: |
+          docker build -t digi2-backend:test apps/backend
+          
           # Build backend image from apps/backend/Dockerfile
           docker build -t digi2-backend:test apps/backend# trigger ECR push
