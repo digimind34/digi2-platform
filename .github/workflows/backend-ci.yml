@@ -68,4 +68,4 @@ jobs:
       - name: Build backend Docker image
         run: |
           # Build backend image from apps/backend/Dockerfile
-          docker build -t digi2-backend:test apps/backend
+          docker build -t digi2-backend:test apps/backend# trigger ECR push

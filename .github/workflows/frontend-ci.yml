@@ -42,4 +42,4 @@ jobs:
       # Step 5: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t digi2-frontend:test apps/frontend
+          docker build -t digi2-frontend:test apps/frontend# trigger ECR push
