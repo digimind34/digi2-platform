@@ -43,7 +43,7 @@ jobs:
         run: |
           npm run build
 
-       # Step 5: Configure AWS credentials for image publishing
+      # Step 5: Configure AWS credentials for image publishing
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -52,13 +52,14 @@ jobs:
 
       # Step 6: Login to Amazon ECR
       - name: Login to Amazon ECR
-        #if: github.event_name == 'push'
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       # Step 7: Build and push frontend image
       - name: Build and push frontend image
+        if: github.event_name == 'push'
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: digi2-frontend
           IMAGE_TAG: ${{ github.sha }}
         run: |
