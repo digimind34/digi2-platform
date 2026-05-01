@@ -45,7 +45,6 @@ jobs:
 
        # Step 5: Configure AWS credentials for image publishing
       - name: Configure AWS credentials
-        #if: github.event_name == 'push'
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::385018113052:role/Digi2GitHubActionsECRPushRole
@@ -58,7 +57,6 @@ jobs:
 
       # Step 7: Build and push frontend image
       - name: Build and push frontend image
-        if: github.event_name == 'push'
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: digi2-frontend

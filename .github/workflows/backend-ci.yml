@@ -79,11 +79,10 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # Step 7: Build and push backend image
+       # Step 7: Build and push backend image
       - name: Build and push backend image
-        #if: github.event_name == 'push'
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REGISTRY: 385018113052.dkr.ecr.ca-central-1.amazonaws.com
           ECR_REPOSITORY: digi2-backend
           IMAGE_TAG: ${{ github.sha }}
         run: |
