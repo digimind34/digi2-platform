@@ -39,7 +39,27 @@ jobs:
         run: |
           npm run build
 
-      # Step 5: Build Docker image
-      - name: Build Docker image
+      # Step 5: Configure AWS credentials for image publishing
+      - name: Configure AWS credentials
+        if: github.event_name == 'push'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Step 6: Login to Amazon ECR
+      - name: Login to Amazon ECR
+        if: github.event_name == 'push'
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Step 7: Build and push frontend image
+      - name: Build and push frontend image
+        if: github.event_name == 'push'
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPOSITORY: digi2-frontend
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t digi2-frontend:test apps/frontend
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG apps/frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

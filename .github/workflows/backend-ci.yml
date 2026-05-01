@@ -64,8 +64,27 @@ jobs:
           # Check Django project setup
           python manage.py check
 
-      # Step 5: Build backend Docker image
-      - name: Build backend Docker image
+      # Step 5: Configure AWS credentials for image publishing
+      - name: Configure AWS credentials
+        if: github.event_name == 'push'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Step 6: Login to Amazon ECR
+      - name: Login to Amazon ECR
+        if: github.event_name == 'push'
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Step 7: Build and push backend image
+      - name: Build and push backend image
+        if: github.event_name == 'push'
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPOSITORY: digi2-backend
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build backend image from apps/backend/Dockerfile
-          docker build -t digi2-backend:test apps/backend
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG apps/backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
