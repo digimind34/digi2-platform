@@ -15,6 +15,10 @@ on:
     paths:
       - "apps/backend/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   backend-build:
     # Use GitHub hosted Ubuntu runner
@@ -67,11 +71,10 @@ jobs:
       # Step 5: Configure AWS credentials for image publishing
       - name: Configure AWS credentials
         if: github.event_name == 'push'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::385018113052:role/Digi2GitHubActionsECRPushRole
+          aws-region: ca-central-1
 
       # Step 6: Login to Amazon ECR
       - name: Login to Amazon ECR
