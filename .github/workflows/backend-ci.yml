@@ -81,7 +81,7 @@ jobs:
 
       # Step 7: Build and push backend image
       - name: Build and push backend image
-        if: github.event_name == 'push'
+        #if: github.event_name == 'push'
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: digi2-backend
