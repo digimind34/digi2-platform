@@ -55,7 +55,21 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # Step 7: Build and push frontend image
+      # Step 7: Ensure frontend ECR repository exists
+      - name: Ensure frontend ECR repository exists
+        if: github.event_name == 'push'
+        env:
+          ECR_REPOSITORY: digi2-frontend
+        run: |
+          if ! aws ecr describe-repositories --repository-names "$ECR_REPOSITORY" --region ca-central-1 >/dev/null 2>&1; then
+            aws ecr create-repository \
+              --repository-name "$ECR_REPOSITORY" \
+              --image-scanning-configuration scanOnPush=true \
+              --image-tag-mutability MUTABLE \
+              --region ca-central-1
+          fi
+
+      # Step 8: Build and push frontend image
       - name: Build and push frontend image
         if: github.event_name == 'push'
         env:
