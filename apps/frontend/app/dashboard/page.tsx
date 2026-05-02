@@ -20,12 +20,17 @@ async function getBusinesses(): Promise<{
   businesses: Business[];
   error?: string;
 }> {
-  // This must be http://backend:8000/api inside Docker
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://backend:8000/api";
+  // Server rendering should use the Docker-internal API URL when available.
+  const rawApiUrl =
+    process.env.INTERNAL_API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://backend:8000/api";
+  const apiUrl = rawApiUrl.replace(/\/$/, "");
+  const apiBaseUrl = apiUrl.endsWith("/api") ? apiUrl : `${apiUrl}/api`;
 
   try {
     // Call Django REST API
-    const response = await fetch(`${apiUrl}/businesses/`, {
+    const response = await fetch(`${apiBaseUrl}/businesses/`, {
       cache: "no-store",
     });
 
