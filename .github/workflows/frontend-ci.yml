@@ -39,7 +39,7 @@ jobs:
       - name: Build frontend
         working-directory: apps/frontend
         env:
-          NEXT_PUBLIC_API_URL: http://localhost:8000/api
+          NEXT_PUBLIC_API_URL: http://3.82.37.64/api
         run: |
           npm run build
 
