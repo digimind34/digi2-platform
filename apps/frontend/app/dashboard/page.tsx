@@ -21,10 +21,11 @@ async function getBusinesses(): Promise<{
   error?: string;
 }> {
   // Server rendering should use the Docker-internal API URL when available.
+  const fallbackApiUrl = "http://backend:8000/api";
   const rawApiUrl =
-    process.env.INTERNAL_API_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://backend:8000/api";
+    process.env.INTERNAL_API_URL ??
+    process.env.NEXT_PUBLIC_API_URL ??
+    fallbackApiUrl;
   const apiUrl = rawApiUrl.replace(/\/$/, "");
   const apiBaseUrl = apiUrl.endsWith("/api") ? apiUrl : `${apiUrl}/api`;
 
