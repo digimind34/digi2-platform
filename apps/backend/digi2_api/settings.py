@@ -121,10 +121,14 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files path
-STATIC_URL = "static/",
-STATIC_ROOT = BASE_DIR / "staticfiles",
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -139,5 +143,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         # Allow public access for learning/dev stage
         "rest_framework.permissions.AllowAny",
-    ]
+    ],
 }
+
+FORCE_SCRIPT_NAME = None

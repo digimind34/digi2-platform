@@ -13,5 +13,8 @@ psycopg2-binary==2.9.10
 # Production-ready Python web server
 gunicorn==23.0.0
 
+# Serves static files from Django in container/prod-like environments
+whitenoise==6.12.0
+
 # Allows reading environment variables from .env files
 python-dotenv==1.0.1
