@@ -1,2 +1,2 @@
 # AWS region for Digi2 dev environment
-aws_region = "ca-central-1"
+aws_region = "us-east-1"
