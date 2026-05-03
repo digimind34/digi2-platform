@@ -1,4 +1,5 @@
 // This is the homepage shown at http://localhost:3000
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -13,9 +14,9 @@ export default function HomePage() {
           and grow through modern digital systems.
         </p>
 
-        <a className="button" href="/dashboard">
+        <Link className="button" href="/dashboard">
           Go to Dashboard
-        </a>
+        </Link>
       </section>
     </main>
   );

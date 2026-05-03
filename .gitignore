@@ -12,6 +12,9 @@ __pycache__/
 # Ignore Django local database if ever used
 db.sqlite3
 
+# Ignore collected Django static assets
+apps/backend/staticfiles/
+
 # Ignore Node dependencies
 node_modules/
 

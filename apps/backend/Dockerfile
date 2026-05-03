@@ -25,8 +25,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the backend code into the container
 COPY . .
 
+# Collect Django static assets for WhiteNoise/Gunicorn production serving
+RUN python manage.py collectstatic --noinput
+
 # Expose Django/Gunicorn port
 EXPOSE 8000
 
 # Default production command
-CMD ["gunicorn", "digi2_api.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && exec gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000"]
