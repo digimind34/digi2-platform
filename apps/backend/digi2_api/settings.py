@@ -145,6 +145,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["3.82.37.64", "localhost", "127.0.0.1"]
 
 FORCE_SCRIPT_NAME = None
