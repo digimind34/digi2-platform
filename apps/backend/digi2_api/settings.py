@@ -145,4 +145,6 @@ REST_FRAMEWORK = {
     ],
 }
 
+ALLOWED_HOSTS = ["*"]
+
 FORCE_SCRIPT_NAME = None
