@@ -106,7 +106,7 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "digi2_password"),
 
         # Database host; inside Docker this is the service name: db
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "HOST": os.getenv("POSTGRES_HOST", "igi2-postgres"),
 
         # PostgreSQL default port
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
