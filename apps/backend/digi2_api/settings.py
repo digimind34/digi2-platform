@@ -149,7 +149,6 @@ ALLOWED_HOSTS = [
     "3.82.37.64",
     "localhost",
     "127.0.0.1",
-    "digi2-app",
+    "digi2-app",   # 🔥 THIS IS THE FIX
 ]
-
 FORCE_SCRIPT_NAME = None
