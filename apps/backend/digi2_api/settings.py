@@ -145,6 +145,11 @@ REST_FRAMEWORK = {
     ],
 }
 
-ALLOWED_HOSTS = ["3.82.37.64", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "3.82.37.64",
+    "localhost",
+    "127.0.0.1",
+    "digi2-app",
+]
 
 FORCE_SCRIPT_NAME = None
