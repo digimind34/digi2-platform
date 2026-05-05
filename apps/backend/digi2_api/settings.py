@@ -146,9 +146,14 @@ REST_FRAMEWORK = {
 }
 
 ALLOWED_HOSTS = [
-    "3.82.37.64",
+    "digibab.com",
+    "www.digibab.com",
     "localhost",
-    "127.0.0.1",
-    "digi2-app",   # 🔥 THIS IS THE FIX
+    "127.0.0.1"
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "http://digibab.com",
+    "http://www.digibab.com",
+]
+
 FORCE_SCRIPT_NAME = None
