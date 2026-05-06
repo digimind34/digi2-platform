@@ -7,6 +7,15 @@ from pathlib import Path
 # Project base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+def env_list(name, default):
+    return [
+        item.strip()
+        for item in os.getenv(name, default).split(",")
+        if item.strip()
+    ]
+
+
 # Secret key loaded from environment variable
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")
 
@@ -14,8 +23,13 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 # Allowed hosts are loaded as a comma-separated list
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-
+ALLOWED_HOSTS = [
+    "digibab.com",
+    "www.digibab.com",
+    "localhost",
+    "127.0.0.1",
+    "backend",
+]
 # Installed Django and third-party apps
 INSTALLED_APPS = [
     # Django default apps
@@ -106,7 +120,7 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "digi2_password"),
 
         # Database host; inside Docker this is the service name: db
-        "HOST": os.getenv("POSTGRES_HOST", "igi2-postgres"),
+        "HOST": os.getenv("POSTGRES_HOST", "db"),
 
         # PostgreSQL default port
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
@@ -133,9 +147,10 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Allow Next.js frontend to access Django backend locally
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOWED_ORIGINS = env_list(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:3000,http://digibab.com,http://www.digibab.com,https://digibab.com,https://www.digibab.com",
+)
 
 # Django REST Framework default settings
 REST_FRAMEWORK = {
@@ -145,15 +160,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-ALLOWED_HOSTS = [
-    "digibab.com",
-    "www.digibab.com",
-    "localhost",
-    "127.0.0.1"
-]
-CSRF_TRUSTED_ORIGINS = [
-    "http://digibab.com",
-    "http://www.digibab.com",
-]
+CSRF_TRUSTED_ORIGINS = env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://digibab.com,http://www.digibab.com,https://digibab.com,https://www.digibab.com",
+)
 
 FORCE_SCRIPT_NAME = None
