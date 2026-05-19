@@ -1,31 +1,29 @@
 # Import Django admin
 from django.contrib import admin
 
-# Import Business model
-from .models import Business
+# Import BusinessProfile model
+from .models import BusinessProfile
 
 
-@admin.register(Business)
-class BusinessAdmin(admin.ModelAdmin):
+@admin.register(BusinessProfile)
+class BusinessProfileAdmin(admin.ModelAdmin):
     # Columns shown in Django admin list page
     list_display = (
-        "name",
-        "owner_name",
-        "business_type",
+        "business_name",
+        "owner",
         "city",
-        "is_active",
+        "is_verified",
     )
 
     # Fields searchable in admin
     search_fields = (
-        "name",
-        "owner_name",
+        "business_name",
+        "owner__username",
         "city",
     )
 
     # Sidebar filters in admin
     list_filter = (
-        "business_type",
-        "is_active",
+        "is_verified",
         "city",
     )

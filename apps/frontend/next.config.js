@@ -3,6 +3,8 @@
 // Later we can add image domains, redirects, security headers, etc.
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  output: "standalone",
+};
 
 module.exports = nextConfig;

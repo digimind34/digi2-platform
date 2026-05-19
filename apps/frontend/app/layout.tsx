@@ -3,6 +3,7 @@ import "./globals.css";
 
 // Import Metadata type from Next.js
 import type { Metadata } from "next";
+import { AuthProvider } from "@/components/AuthProvider";
 
 // Metadata controls browser title and SEO basics
 export const metadata: Metadata = {
@@ -17,8 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

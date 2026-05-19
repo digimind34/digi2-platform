@@ -16,5 +16,14 @@ gunicorn==23.0.0
 # Serves static files from Django in container/prod-like environments
 whitenoise==6.12.0
 
+# Required by Django ImageField uploads
+Pillow==10.4.0
+
 # Allows reading environment variables from .env files
 python-dotenv==1.0.1
+
+# JWT authentication for Django REST Framework
+djangorestframework-simplejwt==5.3.1
+
+Pillow>=10.2.0
+Pillow

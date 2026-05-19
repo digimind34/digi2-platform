@@ -1,42 +1,28 @@
-// Define the shape of one business object from Django API
-type Business = {
-  id: number;
-  name: string;
-  owner_name: string;
-  business_type: string;
-  city: string;
-  phone: string;
-  email: string;
-  description: string;
-  website_slug: string;
-  is_active: boolean;
-};
+import Link from "next/link";
+
+import type { BusinessProfile } from "@/lib/businesses";
 
 // Component receives one business and displays it as a card
-export default function BusinessCard({ business }: { business: Business }) {
+export default function BusinessCard({ business }: { business: BusinessProfile }) {
   return (
     <article className="card">
       <div className="cardHeader">
         <div>
-          <h2>{business.name}</h2>
-          <p>{business.city}</p>
+          <h2>{business.business_name}</h2>
+          <p>{business.city || "City not provided"}</p>
         </div>
 
-        <span className={business.is_active ? "badge active" : "badge inactive"}>
-          {business.is_active ? "Active" : "Inactive"}
+        <span className={business.is_verified ? "badge active" : "badge inactive"}>
+          {business.is_verified ? "Verified" : "Unverified"}
         </span>
       </div>
 
       <p>
-        <strong>Owner:</strong> {business.owner_name}
+        <strong>Service Area:</strong> {business.service_area || "Not provided"}
       </p>
 
       <p>
-        <strong>Type:</strong> {business.business_type}
-      </p>
-
-      <p>
-        <strong>Email:</strong> {business.email || "Not provided"}
+        <strong>Website:</strong> {business.website || "Not provided"}
       </p>
 
       <p>
@@ -45,9 +31,9 @@ export default function BusinessCard({ business }: { business: Business }) {
 
       <p className="description">{business.description}</p>
 
-      <p className="slug">
-        Website slug: <code>{business.website_slug}</code>
-      </p>
+      <Link className="button secondary" href={`/business/${business.id}`}>
+        View Profile
+      </Link>
     </article>
   );
 }

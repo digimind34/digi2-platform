@@ -1,3 +1,5 @@
+import importlib.util
+
 # Import operating system environment variables
 import os
 
@@ -16,20 +18,38 @@ def env_list(name, default):
     ]
 
 
+def env_bool(name, default):
+    return os.getenv(name, default).lower() in ("1", "true", "yes", "on")
+
+
 # Secret key loaded from environment variable
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")
 
 # Debug mode should only be True locally
-DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+DEBUG = env_bool("DJANGO_DEBUG", "False")
 
-# Allowed hosts are loaded as a comma-separated list
+PUBLIC_IP = os.getenv("PUBLIC_IP", "")
+DOMAIN = os.getenv("DOMAIN", "digibab.com")
+FRONTEND_PORT = os.getenv("FRONTEND_PORT", "3000")
+
 ALLOWED_HOSTS = [
-    "digibab.com",
-    "www.digibab.com",
     "localhost",
     "127.0.0.1",
     "backend",
+    "digi2-backend",
+    DOMAIN,
+    f"www.{DOMAIN}",
 ]
+
+if PUBLIC_IP:
+    ALLOWED_HOSTS.append(PUBLIC_IP)
+
+CORS_ALLOW_CREDENTIALS = True
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+SESSION_COOKIE_SECURE = env_bool("SESSION_COOKIE_SECURE", "False" if DEBUG else "True")
+CSRF_COOKIE_SECURE = env_bool("CSRF_COOKIE_SECURE", "False" if DEBUG else "True")
 # Installed Django and third-party apps
 INSTALLED_APPS = [
     # Django default apps
@@ -45,7 +65,11 @@ INSTALLED_APPS = [
 
     # Digi2 business app
     "businesses",
+    "accounts",
 ]
+
+if DEBUG and importlib.util.find_spec("django_extensions"):
+    INSTALLED_APPS.append("django_extensions")
 
 # Middleware controls request/response processing
 MIDDLEWARE = [
@@ -138,6 +162,9 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -146,23 +173,49 @@ STORAGES = {
 # Default primary key type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Custom User Model
+AUTH_USER_MODEL = "accounts.User"
+
 # Allow Next.js frontend to access Django backend locally
-CORS_ALLOWED_ORIGINS = env_list(
-    "CORS_ALLOWED_ORIGINS",
-    "http://localhost:3000,http://digibab.com,http://www.digibab.com,https://digibab.com,https://www.digibab.com",
-)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    f"http://{DOMAIN}",
+    f"https://{DOMAIN}",
+    f"http://www.{DOMAIN}",
+    f"https://www.{DOMAIN}",
+]
+
+if PUBLIC_IP:
+    CORS_ALLOWED_ORIGINS.extend([
+        f"http://{PUBLIC_IP}",
+        f"http://{PUBLIC_IP}:{FRONTEND_PORT}",
+    ])
 
 # Django REST Framework default settings
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "authentication.authenticate.CookieJWTAuthentication",
+    ],
     "DEFAULT_PERMISSION_CLASSES": [
-        # Allow public access for learning/dev stage
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
 }
 
-CSRF_TRUSTED_ORIGINS = env_list(
-    "CSRF_TRUSTED_ORIGINS",
-    "http://digibab.com,http://www.digibab.com,https://digibab.com,https://www.digibab.com",
-)
+CSRF_TRUSTED_ORIGINS = [
+    f"http://{DOMAIN}",
+    f"https://{DOMAIN}",
+    f"http://www.{DOMAIN}",
+    f"https://www.{DOMAIN}",
+]
+
+if PUBLIC_IP:
+    CSRF_TRUSTED_ORIGINS.extend([
+        f"http://{PUBLIC_IP}",
+        f"http://{PUBLIC_IP}:{FRONTEND_PORT}",
+    ])
 
 FORCE_SCRIPT_NAME = None
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

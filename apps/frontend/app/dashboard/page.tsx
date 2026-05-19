@@ -1,99 +1,51 @@
-// Import the reusable BusinessCard component
-import BusinessCard from "../../components/BusinessCard";
+import Link from "next/link";
 
-// Define the expected API data shape
-type Business = {
-  id: number;
-  name: string;
-  owner_name: string;
-  business_type: string;
-  city: string;
-  phone: string;
-  email: string;
-  description: string;
-  website_slug: string;
-  is_active: boolean;
-};
+const dashboardLinks = [
+  {
+    href: "/dashboard/business-profile",
+    title: "Business Profile",
+    description: "Manage your public business details and logo.",
+  },
+  {
+    href: "/dashboard/services",
+    title: "Services",
+    description: "Create, edit, and publish the services you offer.",
+  },
+  {
+    href: "/dashboard/business",
+    title: "Business Dashboard",
+    description: "Review your business account overview.",
+  },
+];
 
-// Fetch businesses from Django backend
-async function getBusinesses(): Promise<{
-  businesses: Business[];
-  error?: string;
-}> {
-  // Server rendering should use the Docker-internal API URL when available.
-  const fallbackApiUrl = "http://127.0.0.1:8000/api";
-  const rawApiUrl =
-    process.env.INTERNAL_API_URL ??
-    process.env.NEXT_PUBLIC_API_URL ??
-    fallbackApiUrl;
-  const apiUrl = rawApiUrl.replace(/\/$/, "");
-  const apiBaseUrl = apiUrl.endsWith("/api") ? apiUrl : `${apiUrl}/api`;
-
-  try {
-    // Call Django REST API
-    const response = await fetch(`${apiBaseUrl}/businesses/`, {
-      cache: "no-store",
-    });
-
-    // Show actual HTTP error if Django returns a bad response
-    if (!response.ok) {
-      return {
-        businesses: [],
-        error: `API returned status ${response.status}`,
-      };
-    }
-
-    // Convert response to JSON
-    const data = await response.json();
-
-    return {
-      businesses: data,
-    };
-  } catch (error) {
-    // Show connection error
-    return {
-      businesses: [],
-      error: `Could not connect to API: ${String(error)}`,
-    };
-  }
-}
-
-// Dashboard page
-export default async function DashboardPage() {
-  // Get businesses and possible error
-  const { businesses, error } = await getBusinesses();
-
+export default function DashboardPage() {
   return (
-    <main className="page">
-      <section className="dashboardHeader">
-        <div>
-          <p className="eyebrow">Dashboard</p>
-          <h1>Digi2 Business Dashboard</h1>
-          <p>Manage handyman business profiles from one place.</p>
+    <main className="min-h-screen bg-gray-50 p-6">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-8">
+          <p className="text-sm font-medium uppercase tracking-wide text-gray-500">
+            Dashboard
+          </p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Manage Your Business
+          </h1>
         </div>
 
-        <a className="button" href="/">
-          Back Home
-        </a>
-      </section>
-
-      {error && (
-        <p className="empty">
-          API Error: {error}
-        </p>
-      )}
-
-      <section className="grid">
-        {businesses.length === 0 && !error ? (
-          <p className="empty">
-            No businesses found yet. Add one from Django Admin.
-          </p>
-        ) : (
-          businesses.map((business) => (
-            <BusinessCard key={business.id} business={business} />
-          ))
-        )}
-      </section>
+        <div className="grid gap-4 md:grid-cols-3">
+          {dashboardLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-300"
+            >
+              <h2 className="text-lg font-semibold text-gray-900">
+                {item.title}
+              </h2>
+              <p className="mt-2 text-sm text-gray-600">{item.description}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
     </main>
   );
 }

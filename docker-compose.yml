@@ -1,10 +1,11 @@
-# Defines all local services needed for Digi2 development
+# Defines the production Docker services for Digi2
 services:
 
   # PostgreSQL database container
   db:
     image: postgres:16
     container_name: digi2-db
+    restart: unless-stopped
 
     # Environment variables used by PostgreSQL on first startup
     environment:
@@ -13,66 +14,105 @@ services:
       POSTGRES_PASSWORD: digi2_password
 
     # Exposes PostgreSQL to your computer for debugging
-    ports:
-      - "5433:5432"
+    expose:
+      - "5432"
 
     # Keeps database data even if the container stops
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - digi2-network
 
-  # Django REST API backend container
   backend:
     build:
       context: ./apps/backend
-
+      dockerfile: Dockerfile
     container_name: digi2-backend
+    restart: unless-stopped
+    mem_limit: 1g
 
-    # Starts Django development server
-    command: python manage.py runserver 0.0.0.0:8000
+    # Run Django securely using Gunicorn WSGI server instead of development server
+    command: gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
 
-    # Mounts backend source code into the container
-    volumes:
-      - ./apps/backend:/app
-
-    # Exposes backend API on localhost:8000
-    ports:
-      - "8000:8000"
+    # Backend is reachable by Nginx inside Docker only.
+    expose:
+      - "8000"
 
     # Loads variables from .env
     env_file:
       - .env
+      
+    volumes:
+      - media_volume:/app/media
 
     # Backend starts after database container
     depends_on:
       - db
+    networks:
+      - digi2-network
 
   # Next.js frontend container
   frontend:
     build:
       context: ./apps/frontend
-
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     container_name: digi2-frontend
-
-    # Starts Next.js development server
-    command: npm run dev
-
-    # Mounts frontend source code into the container
-    volumes:
-      - ./apps/frontend:/app
-      - /app/node_modules
-
-    # Exposes frontend on localhost:3000
-    ports:
-      - "3000:3000"
-
-    # Loads frontend environment variables
-    env_file:
-      - .env
-
-    # Frontend starts after backend container
+    restart: unless-stopped
+    mem_limit: 1g
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    expose:
+      - "3000"
     depends_on:
       - backend
+    networks:
+      - digi2-network
+
+  nginx:
+     image: nginx:latest
+     container_name: digi2-nginx
+     restart: unless-stopped
+     ports:
+       - "80:80"
+       - "443:443"
+
+     volumes:
+       - ./infra/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+       - ./certbot/conf:/etc/letsencrypt:ro
+       - ./certbot/www:/var/www/certbot:ro
+       - media_volume:/app/media
+     depends_on:
+       - frontend
+       - backend
+     networks:
+       - digi2-network
+
+  certbot:
+     image: certbot/certbot:latest
+     container_name: digi2-certbot
+     restart: unless-stopped
+     volumes:
+       - ./certbot/conf:/etc/letsencrypt
+       - ./certbot/www:/var/www/certbot
+     entrypoint: >
+       /bin/sh -c "trap exit TERM;
+       while :; do
+       certbot renew --webroot -w /var/www/certbot --quiet;
+       sleep 12h & wait $${!};
+       done;"
+     networks:
+       - digi2-network
 
 # Named Docker volume for database persistence
 volumes:
   postgres_data:
+  media_volume:
+
+networks:
+  digi2-network:
+    name: digi2-network
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-digi2
