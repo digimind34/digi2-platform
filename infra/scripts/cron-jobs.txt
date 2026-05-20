@@ -1,0 +1,8 @@
+0 2 * * * /home/ec2-user/DIGI2-PLATFORM/infra/scripts/backup-postgres.sh >> /home/ec2-user/DIGI2-PLATFORM/backups/postgres/backup.log 2>&1
+
+30 2 * * * /home/ec2-user/DIGI2-PLATFORM/infra/scripts/backup-media.sh >> /home/ec2-user/DIGI2-PLATFORM/backups/media/backup.log 2>&1
+
+45 2 * * * /home/ec2-user/DIGI2-PLATFORM/infra/scripts/sync-backups-s3.sh >> /home/ec2-user/DIGI2-PLATFORM/backups/s3-sync.log 2>&1
+
+0 3 * * * docker restart digi2-nginx
+

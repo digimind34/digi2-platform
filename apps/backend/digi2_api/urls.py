@@ -2,12 +2,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
 from authentication.views import (
     CookieTokenObtainPairView,
     CookieTokenRefreshView,
     CsrfCookieView,
     LogoutView,
 )
+
+def health_check(request):
+    return JsonResponse({"status": "healthy"})
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -18,6 +22,7 @@ urlpatterns = [
     path("api/auth/logout/", LogoutView.as_view(), name="logout"),
     path("api/accounts/", include("accounts.urls")),
     path("api/businesses/", include("businesses.urls")),
+    path("health/", health_check),
 ]
 
 if settings.DEBUG:

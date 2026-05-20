@@ -1,0 +1,46 @@
+{
+  "Rules": [
+    {
+      "ID": "digi2-postgres-backups-retention",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "postgres/"
+      },
+      "Transitions": [
+        {
+          "Days": 30,
+          "StorageClass": "GLACIER"
+        }
+      ],
+      "Expiration": {
+        "Days": 180
+      }
+    },
+    {
+      "ID": "digi2-media-backups-retention",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "media/"
+      },
+      "Transitions": [
+        {
+          "Days": 60,
+          "StorageClass": "GLACIER"
+        }
+      ],
+      "Expiration": {
+        "Days": 365
+      }
+    },
+    {
+      "ID": "digi2-log-backups-retention",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "logs/"
+      },
+      "Expiration": {
+        "Days": 30
+      }
+    }
+  ]
+}

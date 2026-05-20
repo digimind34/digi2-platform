@@ -1,6 +1,8 @@
 # Use a lightweight official Python image
 FROM python:3.12-slim
 
+RUN apt-get update && apt-get install -y curl
+
 # Prevent Python from writing .pyc cache files
 ENV PYTHONDONTWRITEBYTECODE=1
 
