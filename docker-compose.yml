@@ -30,9 +30,7 @@ services:
       - digi2-network
 
   backend:
-    build:
-      context: ./apps/backend
-      dockerfile: Dockerfile
+    image: 385018113052.dkr.ecr.us-east-1.amazonaws.com/digi2-backend:${BACKEND_IMAGE_TAG}
     container_name: digi2-backend
     restart: unless-stopped
     mem_limit: 1g
@@ -67,11 +65,7 @@ services:
 
   # Next.js frontend container
   frontend:
-    build:
-      context: ./apps/frontend
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    image: 385018113052.dkr.ecr.us-east-1.amazonaws.com/digi2-frontend:${FRONTEND_IMAGE_TAG}
     container_name: digi2-frontend
     restart: unless-stopped
     mem_limit: 1g

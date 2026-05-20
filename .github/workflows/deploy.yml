@@ -24,7 +24,11 @@ jobs:
 
             git pull origin main
 
-            docker-compose up -d --build
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 385018113052.dkr.ecr.us-east-1.amazonaws.com
+
+            docker-compose pull
+
+            docker-compose up -d
 
             docker-compose exec -T backend python manage.py migrate
 
