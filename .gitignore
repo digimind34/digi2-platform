@@ -28,6 +28,9 @@ out/
 .terraform/
 .terraform.lock.hcl
 
+# Ignore observability runtime data written by local containers
+monitoring/tempo/data/
+
 # Ignore OS/editor files
 .DS_Store
 .vscode/

@@ -1,0 +1,49 @@
+services:
+  backend-green:
+    image: 385018113052.dkr.ecr.us-east-1.amazonaws.com/digi2-backend:${BACKEND_IMAGE_TAG}
+    container_name: digi2-backend-green
+    restart: unless-stopped
+    mem_limit: 1g
+    command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    volumes:
+      - media_volume:/app/media
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - digi2-network
+
+  frontend-green:
+    image: 385018113052.dkr.ecr.us-east-1.amazonaws.com/digi2-frontend:${FRONTEND_IMAGE_TAG}
+    container_name: digi2-frontend-green
+    restart: unless-stopped
+    mem_limit: 1g
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      backend-green:
+        condition: service_healthy
+    networks:
+      - digi2-network
+
+volumes:
+  media_volume:
+
+networks:
+  digi2-network:
+    external: true

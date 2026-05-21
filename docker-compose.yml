@@ -36,7 +36,7 @@ services:
     mem_limit: 1g
 
     # Run Django securely using Gunicorn WSGI server instead of development server
-    command: gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
+    command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
 
     # Backend is reachable by Nginx inside Docker only.
     expose:
@@ -96,6 +96,7 @@ services:
 
      volumes:
        - ./infra/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+       - ./infra/nginx/active-upstream.conf:/etc/nginx/active-upstream.conf:ro
        - ./certbot/conf:/etc/letsencrypt:ro
        - ./certbot/www:/var/www/certbot:ro
        - media_volume:/app/media
@@ -218,6 +219,36 @@ services:
       - digi2-network
     depends_on:
       - loki
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: digi2-tempo
+    restart: unless-stopped
+    command: -config.file=/etc/tempo/tempo.yml
+    volumes:
+      - ./monitoring/tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - ./monitoring/tempo/data:/tmp/tempo
+    networks:
+      - digi2-network
+    expose:
+      - "3200"
+      - "4317"
+      - "4318"
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: digi2-otel-collector
+    restart: unless-stopped
+    command: ["--config=/etc/otel-collector.yml"]
+    volumes:
+      - ./monitoring/otel/otel-collector.yml:/etc/otel-collector.yml:ro
+    networks:
+      - digi2-network
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - tempo
 
 # Named Docker volume for database persistence
 volumes:
