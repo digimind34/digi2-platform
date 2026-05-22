@@ -42,6 +42,9 @@ services:
     expose:
       - "8000"
 
+    environment:
+      DJANGO_SETTINGS_MODULE: digi2_api.settings
+
     # Loads variables from .env
     env_file:
       - .env

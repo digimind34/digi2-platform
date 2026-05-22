@@ -7,6 +7,8 @@ services:
     command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
     expose:
       - "8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: digi2_api.settings
     env_file:
       - .env
     volumes:
