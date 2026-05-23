@@ -78,6 +78,7 @@ MIDDLEWARE = [
 
     # Django security middleware
     "django.middleware.security.SecurityMiddleware",
+    "common.middleware.RequestTraceLoggingMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     # Session management
