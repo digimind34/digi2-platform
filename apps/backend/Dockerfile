@@ -34,4 +34,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Default production command
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && exec gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && exec opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000"]

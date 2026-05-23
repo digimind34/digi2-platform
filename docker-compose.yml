@@ -44,6 +44,8 @@ services:
 
     environment:
       DJANGO_SETTINGS_MODULE: digi2_api.settings
+      OTEL_PYTHON_LOG_CORRELATION: "true"
+      OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "true"
 
     # Loads variables from .env
     env_file:

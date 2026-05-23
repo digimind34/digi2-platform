@@ -69,6 +69,7 @@ jobs:
 
       # Step 5: Configure AWS credentials for image publishing
       - name: Configure AWS credentials
+        if: github.event_name == 'push'
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::385018113052:role/Digi2GitHubActionsECRPushRole
@@ -76,6 +77,7 @@ jobs:
 
       # Step 6: Login to Amazon ECR
       - name: Login to Amazon ECR
+        if: github.event_name == 'push'
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
