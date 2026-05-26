@@ -224,21 +224,25 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {
-        "json": {
-            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
-            "format": "%(asctime)s %(levelname)s %(name)s %(message)s %(trace_id)s %(span_id)s",
-        },
-    },
     "filters": {
         "trace_context": {
             "()": "digi2_api.logging_filters.TraceContextFilter",
         },
     },
+    "formatters": {
+        "verbose": {
+            "format": (
+                "%(asctime)s "
+                "[%(levelname)s] "
+                "[trace_id=%(otelTraceID)s span_id=%(otelSpanID)s] "
+                "%(name)s: %(message)s"
+            ),
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "json",
+            "formatter": "verbose",
             "filters": ["trace_context"],
         },
     },
@@ -254,8 +258,26 @@ LOGGING = {
         },
         "django.request": {
             "handlers": ["console"],
-            "level": "WARNING",
+            "level": "INFO",
+            "propagate": False,
+        },
+        "businesses": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "accounts": {
+            "handlers": ["console"],
+            "level": "INFO",
             "propagate": False,
         },
     },
 }
+
+if env_bool("OTEL_MANUAL_INSTRUMENTATION_ENABLED", "False"):
+    try:
+        from config.otel import initialize_otel
+
+        initialize_otel()
+    except Exception as e:
+        print("OpenTelemetry init failed:", e)

@@ -8,10 +8,10 @@ class TraceContextFilter(logging.Filter):
         span_context = span.get_span_context()
 
         if span_context and span_context.is_valid:
-            record.trace_id = format(span_context.trace_id, "032x")
-            record.span_id = format(span_context.span_id, "016x")
+            record.otelTraceID = format(span_context.trace_id, "032x")
+            record.otelSpanID = format(span_context.span_id, "016x")
         else:
-            record.trace_id = ""
-            record.span_id = ""
+            record.otelTraceID = "0" * 32
+            record.otelSpanID = "0" * 16
 
         return True

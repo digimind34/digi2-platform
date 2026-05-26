@@ -4,13 +4,14 @@ services:
     container_name: digi2-backend-green
     restart: unless-stopped
     mem_limit: 1g
-    command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
+    command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1 --access-logfile - --error-logfile - --capture-output --enable-stdio-inheritance
     expose:
       - "8000"
     environment:
       DJANGO_SETTINGS_MODULE: digi2_api.settings
+      PYTHONUNBUFFERED: "1"
       OTEL_PYTHON_LOG_CORRELATION: "true"
-      OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "true"
+      OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "false"
     env_file:
       - .env
     volumes:
@@ -34,7 +35,7 @@ services:
     expose:
       - "3000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3

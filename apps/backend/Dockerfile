@@ -9,6 +9,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Make Python output logs immediately
 ENV PYTHONUNBUFFERED=1
 
+RUN groupadd -g 1000 app && useradd -u 1000 -g app -s /bin/sh app
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -27,11 +29,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the backend code into the container
 COPY . .
 
-# Collect Django static assets for WhiteNoise/Gunicorn production serving
-RUN python manage.py collectstatic --noinput
+RUN chown -R app:app /app
+
+USER app
 
 # Expose Django/Gunicorn port
 EXPOSE 8000
 
 # Default production command
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && exec opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "digi2_api.wsgi:application"]

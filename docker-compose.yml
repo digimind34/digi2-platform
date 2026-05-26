@@ -32,11 +32,20 @@ services:
   backend:
     image: 385018113052.dkr.ecr.us-east-1.amazonaws.com/digi2-backend:${BACKEND_IMAGE_TAG}
     container_name: digi2-backend
+    user: "1000:1000"
     restart: unless-stopped
     mem_limit: 1g
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:./infra/security/seccomp/digi2-app-seccomp.json
+    cap_drop:
+      - ALL
 
     # Run Django securely using Gunicorn WSGI server instead of development server
-    command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1
+    command: opentelemetry-instrument gunicorn digi2_api.wsgi:application --bind 0.0.0.0:8000 --workers 1 --access-logfile - --error-logfile - --capture-output --enable-stdio-inheritance
 
     # Backend is reachable by Nginx inside Docker only.
     expose:
@@ -44,8 +53,9 @@ services:
 
     environment:
       DJANGO_SETTINGS_MODULE: digi2_api.settings
+      PYTHONUNBUFFERED: "1"
       OTEL_PYTHON_LOG_CORRELATION: "true"
-      OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "true"
+      OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "false"
 
     # Loads variables from .env
     env_file:
@@ -72,15 +82,24 @@ services:
   frontend:
     image: 385018113052.dkr.ecr.us-east-1.amazonaws.com/digi2-frontend:${FRONTEND_IMAGE_TAG}
     container_name: digi2-frontend
+    user: "node"
     restart: unless-stopped
     mem_limit: 1g
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:./infra/security/seccomp/digi2-app-seccomp.json
+    cap_drop:
+      - ALL
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     expose:
       - "3000"
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -95,6 +114,15 @@ services:
      image: nginx:latest
      container_name: digi2-nginx
      restart: unless-stopped
+     read_only: true
+     tmpfs:
+       - /tmp
+       - /var/cache/nginx
+       - /var/run
+     security_opt:
+       - no-new-privileges:true
+       - seccomp:./infra/security/seccomp/digi2-app-seccomp.json
+     
      ports:
        - "80:80"
        - "443:443"
@@ -156,6 +184,7 @@ services:
     environment:
       - GF_SERVER_ROOT_URL=https://digibab.com/grafana
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_UNIFIED_ALERTING_ENABLED=true
 
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=smtp.gmail.com:587
@@ -168,6 +197,9 @@ services:
       
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/provisioning/alerting:/etc/grafana/provisioning/alerting
     networks:
       - digi2-network
     expose:
@@ -219,6 +251,7 @@ services:
     volumes:
       - ./monitoring/promtail/promtail-config.yml:/etc/promtail/promtail-config.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log/falco-events.log:/var/log/falco-events.log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - digi2-network

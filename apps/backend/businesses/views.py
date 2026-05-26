@@ -74,6 +74,7 @@ class PublicServiceViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "slug"
 
     def get_queryset(self):
+        print("PUBLIC SERVICES QUERYSET HIT")
         return Service.objects.filter(is_active=True).order_by("-created_at")
 
 

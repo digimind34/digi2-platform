@@ -17,3 +17,12 @@ scrape_configs:
           job: docker-containers
           host: digi2-ec2
           __path__: /var/lib/docker/containers/*/*.log
+
+  - job_name: falco
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: falco
+          host: digi2
+          __path__: /var/log/falco-events.log

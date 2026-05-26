@@ -1,0 +1,138 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: falco-security-alerts
+    folder: Security
+    interval: 1m
+
+    rules:
+      - uid: falco-sensitive-files
+        title: Sensitive File Access Detected
+        condition: B
+
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+
+            datasourceUid: loki
+
+            model:
+              editorMode: code
+              expr: |
+                sum(count_over_time({job="falco"} |= "/etc/shadow" [5m]))
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+
+          - refId: B
+            relativeTimeRange:
+              from: 0
+              to: 0
+
+            datasourceUid: __expr__
+
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+              type: classic_conditions
+
+        noDataState: OK
+        execErrState: Error
+
+        for: 1m
+
+        annotations:
+          summary: Sensitive file access detected
+          description: Falco detected access to /etc/shadow
+
+        labels:
+          severity: critical
+
+      - uid: falco-shell-detected
+        title: Shell Spawned Inside Container
+        condition: B
+
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+
+            datasourceUid: loki
+
+            model:
+              editorMode: code
+              expr: |
+                sum(count_over_time({job="falco"} |= "shell" [5m]))
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+
+          - refId: B
+            relativeTimeRange:
+              from: 0
+              to: 0
+
+            datasourceUid: __expr__
+
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+              type: classic_conditions
+
+        noDataState: OK
+        execErrState: Error
+
+        for: 30s
+
+        annotations:
+          summary: Shell detected inside container
+          description: Possible container intrusion or manual exec detected
+
+        labels:
+          severity: warning
+          category: runtime-security
+          project: digi2
