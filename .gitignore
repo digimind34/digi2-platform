@@ -35,3 +35,12 @@ monitoring/tempo/data/
 .DS_Store
 .vscode/
 .idea/
+
+# Certbot
+certbot/conf/live/
+certbot/conf/archive/
+certbot/conf/accounts/
+
+# SSL
+*.pem
+*.key
