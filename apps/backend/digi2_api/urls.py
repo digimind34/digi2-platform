@@ -22,6 +22,7 @@ urlpatterns = [
     path("api/auth/logout/", LogoutView.as_view(), name="logout"),
     path("api/accounts/", include("accounts.urls")),
     path("api/businesses/", include("businesses.urls")),
+    path("api/billing/", include("billing.urls")),
     path("health/", health_check),
 ]
 
