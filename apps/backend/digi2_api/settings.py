@@ -35,6 +35,10 @@ PUBLIC_IP = os.getenv("PUBLIC_IP", "")
 DOMAIN = os.getenv("DOMAIN", "digibab.com")
 FRONTEND_PORT = os.getenv("FRONTEND_PORT", "3000")
 
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
