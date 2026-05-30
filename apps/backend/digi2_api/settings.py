@@ -23,7 +23,10 @@ def env_bool(name, default):
 
 
 # Secret key loaded from environment variable
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+
+if not SECRET_KEY:
+    raise RuntimeError("DJANGO_SECRET_KEY is required")
 
 # Debug mode should only be True locally
 DEBUG = env_bool("DJANGO_DEBUG", "False")
@@ -66,6 +69,7 @@ INSTALLED_APPS = [
     # Digi2 business app
     "businesses",
     "accounts",
+    "billing.apps.BillingConfig",
 ]
 
 if DEBUG and importlib.util.find_spec("django_extensions"):
