@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, UserRole
+from billing.models import Subscription
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -22,6 +23,11 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             email=validated_data.get("email", ""),
             password=validated_data["password"],
+        )
+
+        Subscription.objects.get_or_create(
+            user=user,
+            defaults={"plan": "free"}
         )
 
         return user
