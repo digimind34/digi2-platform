@@ -41,6 +41,11 @@ STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 
+STRIPE_PORTAL_RETURN_URL = os.getenv(
+    "STRIPE_PORTAL_RETURN_URL",
+    "https://digibab.com/dashboard/customer"
+)
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",

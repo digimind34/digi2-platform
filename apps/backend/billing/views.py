@@ -43,6 +43,24 @@ class CreateCheckoutSessionView(APIView):
 
         return Response({"checkout_url": session.url})
 
+class CreateCustomerPortalSessionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        subscription = getattr(request.user, "subscription", None)
+
+        if not subscription or not subscription.stripe_customer_id:
+            return Response(
+                {"detail": "No Stripe customer found for this user."},
+                status=400
+            )
+
+        portal_session = stripe.billing_portal.Session.create(
+            customer=subscription.stripe_customer_id,
+            return_url=settings.STRIPE_PORTAL_RETURN_URL,
+        )
+
+        return Response({"portal_url": portal_session.url})
 
 @method_decorator(csrf_exempt, name="dispatch")
 class StripeWebhookView(APIView):
@@ -67,9 +85,7 @@ class StripeWebhookView(APIView):
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
 
-            print("SESSION METADATA:", session.metadata)
-            print("SESSION OBJECT:", session)
-
+           
             customer_email = getattr(session, "customer_email", None)
             customer_id = getattr(session, "customer", None)
             subscription_id = getattr(session, "subscription", None)
