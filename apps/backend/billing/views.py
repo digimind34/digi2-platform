@@ -6,6 +6,7 @@ import stripe
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
+from .serializers import SubscriptionSerializer
 
 from .models import Subscription
 from accounts.models import User
@@ -61,6 +62,23 @@ class CreateCustomerPortalSessionView(APIView):
         )
 
         return Response({"portal_url": portal_session.url})
+
+
+class CurrentSubscriptionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        subscription, _ = Subscription.objects.get_or_create(
+            user=request.user,
+            defaults={
+                "plan": "free",
+                "active": True,
+            }
+        )
+
+        serializer = SubscriptionSerializer(subscription)
+        return Response(serializer.data)
+
 
 @method_decorator(csrf_exempt, name="dispatch")
 class StripeWebhookView(APIView):
