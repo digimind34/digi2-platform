@@ -57,9 +57,9 @@ class StripeWebhookView(APIView):
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
 
-            customer_email = session.get("customer_email")
-            customer_id = session.get("customer")
-            subscription_id = session.get("subscription")
+            customer_email = getattr(session, "customer_email", None)
+            customer_id = getattr(session, "customer", None)
+            subscription_id = getattr(session, "subscription", None)
 
             try:
                 user = User.objects.get(email=customer_email)
