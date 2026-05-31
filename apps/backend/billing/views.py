@@ -78,10 +78,7 @@ class StripeWebhookView(APIView):
 
             user_id = None
             if metadata:
-                try:
-                    user_id = metadata["user_id"]
-                except KeyError:
-                    pass
+                user_id = metadata["user_id"]
 
             try:
                 user = User.objects.get(id=user_id)
