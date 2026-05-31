@@ -20,6 +20,16 @@ class CreateCheckoutSessionView(APIView):
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             mode="subscription",
+            metadata={
+                "user_id": str(request.user.id),
+                "plan": "starter",
+            },
+            subscription_data={
+                "metadata": {
+                    "user_id": str(request.user.id),
+                    "plan": "starter",
+                }
+            },
             line_items=[
                 {
                     "price": settings.STRIPE_PRICE_ID,
@@ -61,8 +71,11 @@ class StripeWebhookView(APIView):
             customer_id = getattr(session, "customer", None)
             subscription_id = getattr(session, "subscription", None)
 
+            metadata = getattr(session, "metadata", {})
+            user_id = metadata.get("user_id")
+
             try:
-                user = User.objects.get(email=customer_email)
+                user = User.objects.get(id=user_id)
 
                 subscription, _ = Subscription.objects.get_or_create(
                     user=user
