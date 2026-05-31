@@ -67,12 +67,21 @@ class StripeWebhookView(APIView):
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
 
+            print("SESSION METADATA:", session.metadata)
+            print("SESSION OBJECT:", session)
+
             customer_email = getattr(session, "customer_email", None)
             customer_id = getattr(session, "customer", None)
             subscription_id = getattr(session, "subscription", None)
 
-            metadata = getattr(session, "metadata", {})
-            user_id = metadata.get("user_id")
+            metadata = getattr(session, "metadata", None)
+
+            user_id = None
+            if metadata:
+                try:
+                    user_id = metadata["user_id"]
+                except KeyError:
+                    pass
 
             try:
                 user = User.objects.get(id=user_id)
