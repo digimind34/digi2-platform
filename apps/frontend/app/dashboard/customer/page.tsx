@@ -59,6 +59,8 @@ export default function CustomerDashboardPage() {
     }
   }
 
+  const isPaidCustomer = Boolean(subscription?.stripe_customer_id);
+
   return (
     <main className="min-h-screen bg-gray-50 p-6">
       <div className="mx-auto max-w-5xl">
@@ -90,14 +92,23 @@ export default function CustomerDashboardPage() {
             </span>
           </p>
 
-          {subscription?.stripe_customer_id && (
-            <button
-              onClick={openCustomerPortal}
-              className="mt-4 rounded bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
-            >
-              Manage Subscription
-            </button>
-          )}
+          <div className="mt-4">
+            {isPaidCustomer ? (
+              <button
+                onClick={openCustomerPortal}
+                className="rounded bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
+              >
+                Manage Subscription
+              </button>
+            ) : (
+              <Link
+                href="/billing"
+                className="inline-block rounded bg-green-600 px-5 py-2 text-white hover:bg-green-700"
+              >
+                Upgrade Plan
+              </Link>
+            )}
+          </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
