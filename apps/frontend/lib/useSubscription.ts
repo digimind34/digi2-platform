@@ -10,7 +10,7 @@ type Subscription = {
 
 export function useSubscription() {
   const [loading, setLoading] = useState(true);
-  const [subscription, setSubscription] = useState<any>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   useEffect(() => {
     fetch("/api/billing/me/", {
@@ -22,14 +22,15 @@ export function useSubscription() {
         setLoading(false);
       })
       .catch(() => {
+        setSubscription(null);
         setLoading(false);
       });
   }, []);
 
   const isPremium =
-    subscription?.active &&
-    subscription?.plan &&
-    subscription.plan !== "free";
+    Boolean(subscription?.active) &&
+    Boolean(subscription?.plan) &&
+    subscription?.plan !== "free";
 
   return {
     loading,

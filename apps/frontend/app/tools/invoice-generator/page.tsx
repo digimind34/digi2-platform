@@ -271,19 +271,19 @@ ${businessName}
 
   if (!isPremium) {
     return (
-      <main className="p-8">
-        <div className="max-w-xl rounded-lg border p-6">
-          <h1 className="text-2xl font-bold">
-            🔒 Premium Feature
+      <main className="min-h-screen bg-gray-50 p-8">
+        <div className="max-w-xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Premium Feature
           </h1>
 
-          <p className="mt-3">
+          <p className="mt-3 text-gray-600">
             Invoice Generator requires an active subscription.
           </p>
 
           <Link
             href="/billing"
-            className="mt-4 inline-block rounded bg-green-600 px-5 py-2 text-white"
+            className="mt-4 inline-block rounded bg-green-600 px-5 py-2 text-white hover:bg-green-700"
           >
             Upgrade Plan
           </Link>
