@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { apiRequest } from "@/lib/api";
+import { useSubscription } from "@/lib/useSubscription";
 import type { BusinessProfile } from "@/lib/businesses";
 
 export default function BusinessDashboardPage() {
   const [business, setBusiness] = useState<BusinessProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const { subscription, isPremium } = useSubscription();
 
   useEffect(() => {
     let isActive = true;
@@ -46,6 +48,34 @@ export default function BusinessDashboardPage() {
         <Link className="button secondary" href="/dashboard">
           Back
         </Link>
+      </section>
+
+      <section className="card">
+        <div className="cardHeader">
+          <div>
+            <h2>Subscription</h2>
+            <p>
+              Current Plan:{" "}
+              <strong className="capitalize">
+                {subscription?.plan || "Loading..."}
+              </strong>
+            </p>
+            <p>
+              Status:{" "}
+              <strong>{subscription?.active ? "Active" : "Inactive"}</strong>
+            </p>
+          </div>
+
+          {isPremium ? (
+            <Link className="button secondary" href="/billing">
+              Manage Subscription
+            </Link>
+          ) : (
+            <Link className="button" href="/billing">
+              Upgrade Plan
+            </Link>
+          )}
+        </div>
       </section>
 
       {loading ? (
