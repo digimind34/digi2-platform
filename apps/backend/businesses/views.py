@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from .models import BusinessProfile, Service, ServiceRequest
 from .serializers import BusinessProfileSerializer, ServiceSerializer, ServiceRequestSerializer
+from billing.permissions import RequiresActiveSubscription
 
 
 class BusinessProfileView(generics.RetrieveUpdateAPIView):
@@ -45,7 +46,10 @@ class PublicBusinessProfileDetailView(generics.RetrieveAPIView):
 
 class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        RequiresActiveSubscription,
+    ]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_queryset(self):
