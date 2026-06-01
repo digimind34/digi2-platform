@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_DB: digi2
       POSTGRES_USER: digi2_user
-      POSTGRES_PASSWORD: digi2_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     # Exposes PostgreSQL to your computer for debugging
     expose:
@@ -189,7 +189,7 @@ services:
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=smtp.gmail.com:587
       - GF_SMTP_USER=digi2site@gmail.com
-      - GF_SMTP_PASSWORD=fgmehzzeynnpwycp 
+      - GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
       - GF_SMTP_FROM_ADDRESS=digi2site@gmail.com
       - GF_SMTP_FROM_NAME=DIGI2 Alerts
       - GF_SMTP_SKIP_VERIFY=false

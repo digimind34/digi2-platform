@@ -57,7 +57,7 @@ jobs:
           # Database environment variables
           POSTGRES_DB: digi2
           POSTGRES_USER: digi2_user
-          POSTGRES_PASSWORD: digi2_password
+          POSTGRES_PASSWORD: change-me
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
 

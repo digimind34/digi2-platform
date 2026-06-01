@@ -3,6 +3,8 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useSubscription } from "@/lib/useSubscription";
 
 type InvoiceItem = {
   description: string;
@@ -18,6 +20,7 @@ const getTodayDateString = () => {
 };
 
 export default function InvoiceGeneratorPage() {
+  const { loading, isPremium } = useSubscription();
   const [isMounted, setIsMounted] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [businessName, setBusinessName] = useState("Digi2 Service Provider");
@@ -261,6 +264,33 @@ ${businessName}
       pdf.save(`invoice-${invoiceNumber}.pdf`);
     });
   };
+
+  if (loading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (!isPremium) {
+    return (
+      <main className="p-8">
+        <div className="max-w-xl rounded-lg border p-6">
+          <h1 className="text-2xl font-bold">
+            🔒 Premium Feature
+          </h1>
+
+          <p className="mt-3">
+            Invoice Generator requires an active subscription.
+          </p>
+
+          <Link
+            href="/billing"
+            className="mt-4 inline-block rounded bg-green-600 px-5 py-2 text-white"
+          >
+            Upgrade Plan
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 px-6 py-10 print:bg-white print:px-0 print:py-0">

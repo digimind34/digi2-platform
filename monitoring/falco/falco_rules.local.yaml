@@ -1,0 +1,9 @@
+- rule: Ignore pg_isready shadow access
+  desc: Ignore PostgreSQL healthcheck reading shadow
+  condition: >
+    proc.name=pg_isready and
+    container.name=digi2-db
+  output: >
+    Ignored PostgreSQL healthcheck activity
+  priority: debug
+  enabled: false

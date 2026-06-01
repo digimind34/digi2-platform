@@ -28,3 +28,30 @@ Completed 2.0 MiB/2.0 MiB (15.3 MiB/s) with 3 file(s) remainingCompleted 2.0 Mi
 Completed 2.0 MiB/2.0 MiB (15.2 MiB/s) with 2 file(s) remainingCompleted 2.0 MiB/2.0 MiB (14.9 MiB/s) with 2 file(s) remainingupload: DIGI2-PLATFORM/backups/s3-sync.log to s3://digi2-prod-backups-2026/s3-sync.log
 Completed 2.0 MiB/2.0 MiB (14.9 MiB/s) with 1 file(s) remainingupload: DIGI2-PLATFORM/backups/media/media_2026-05-25_02-30-01.tar.gz to s3://digi2-prod-backups-2026/media/media_2026-05-25_02-30-01.tar.gz
 S3 backup sync completed.
+delete: s3://digi2-prod-backups-2026/media/media_2026-05-19_04-50-01.tar.gz
+Completed 0 Bytes/~8.0 MiB (0 Bytes/s) with ~6 file(s) remaining (calculating...)delete: s3://digi2-prod-backups-2026/media/media_2026-05-21_02-30-01.tar.gz      
+Completed 0 Bytes/~8.0 MiB (0 Bytes/s) with ~8 file(s) remaining (calculating...)delete: s3://digi2-prod-backups-2026/media/media_2026-05-20_02-30-01.tar.gz      
+Completed 0 Bytes/8.0 MiB (0 Bytes/s) with 8 file(s) remainingdelete: s3://digi2-prod-backups-2026/postgres/digi2_db_2026-05-19_04-18-35.sql.gz
+Completed 0 Bytes/8.0 MiB (0 Bytes/s) with 7 file(s) remainingdelete: s3://digi2-prod-backups-2026/postgres/digi2_db_2026-05-20_02-00-01.sql.gz
+Completed 0 Bytes/8.0 MiB (0 Bytes/s) with 6 file(s) remainingCompleted 342 Bytes/8.0 MiB (2.3 KiB/s) with 6 file(s) remainingupload: DIGI2-PLATFORM/backups/media/backup.log to s3://digi2-prod-backups-2026/media/backup.log
+Completed 342 Bytes/8.0 MiB (2.3 KiB/s) with 5 file(s) remainingCompleted 1.0 MiB/8.0 MiB (6.7 MiB/s) with 5 file(s) remaining  Completed 1.0 MiB/8.0 MiB (5.9 MiB/s) with 5 file(s) remaining  upload: DIGI2-PLATFORM/backups/postgres/digi2_db_2026-05-30_02-00-02.sql.gz to s3://digi2-prod-backups-2026/postgres/digi2_db_2026-05-30_02-00-02.sql.gz
+Completed 1.0 MiB/8.0 MiB (5.9 MiB/s) with 4 file(s) remainingCompleted 2.0 MiB/8.0 MiB (9.9 MiB/s) with 4 file(s) remainingdelete: s3://digi2-prod-backups-2026/postgres/digi2_db_2026-05-21_02-00-01.sql.gz
+Completed 2.0 MiB/8.0 MiB (9.9 MiB/s) with 3 file(s) remainingCompleted 2.0 MiB/8.0 MiB (8.5 MiB/s) with 3 file(s) remainingupload: DIGI2-PLATFORM/backups/postgres/backup.log to s3://digi2-prod-backups-2026/postgres/backup.log
+Completed 2.0 MiB/8.0 MiB (8.5 MiB/s) with 2 file(s) remainingCompleted 2.0 MiB/8.0 MiB (8.2 MiB/s) with 2 file(s) remainingupload: DIGI2-PLATFORM/backups/s3-sync.log to s3://digi2-prod-backups-2026/s3-sync.log
+Completed 2.0 MiB/8.0 MiB (8.2 MiB/s) with 1 file(s) remainingupload: DIGI2-PLATFORM/backups/media/media_2026-05-30_02-30-02.tar.gz to s3://digi2-prod-backups-2026/media/media_2026-05-30_02-30-02.tar.gz
+S3 backup sync completed.
+delete: s3://digi2-prod-backups-2026/media/media_2026-05-23_02-30-02.tar.gz
+Completed 0 Bytes/~4.0 MiB (0 Bytes/s) with ~4 file(s) remaining (calculating...)delete: s3://digi2-prod-backups-2026/postgres/digi2_db_2026-05-23_02-00-02.sql.gz
+Completed 0 Bytes/4.0 MiB (0 Bytes/s) with 5 file(s) remainingCompleted 1.0 MiB/4.0 MiB (12.9 MiB/s) with 5 file(s) remainingCompleted 1.0 MiB/4.0 MiB (9.5 MiB/s) with 5 file(s) remaining upload: DIGI2-PLATFORM/backups/s3-sync.log to s3://digi2-prod-backups-2026/s3-sync.log
+Completed 1.0 MiB/4.0 MiB (9.5 MiB/s) with 4 file(s) remainingCompleted 2.0 MiB/4.0 MiB (18.3 MiB/s) with 4 file(s) remainingCompleted 2.0 MiB/4.0 MiB (14.2 MiB/s) with 4 file(s) remainingupload: DIGI2-PLATFORM/backups/postgres/digi2_db_2026-05-31_02-00-02.sql.gz to s3://digi2-prod-backups-2026/postgres/digi2_db_2026-05-31_02-00-02.sql.gz
+Completed 2.0 MiB/4.0 MiB (14.2 MiB/s) with 3 file(s) remainingCompleted 2.0 MiB/4.0 MiB (13.4 MiB/s) with 3 file(s) remainingupload: DIGI2-PLATFORM/backups/media/backup.log to s3://digi2-prod-backups-2026/media/backup.log
+Completed 2.0 MiB/4.0 MiB (13.4 MiB/s) with 2 file(s) remainingCompleted 2.0 MiB/4.0 MiB (12.1 MiB/s) with 2 file(s) remainingupload: DIGI2-PLATFORM/backups/postgres/backup.log to s3://digi2-prod-backups-2026/postgres/backup.log
+Completed 2.0 MiB/4.0 MiB (12.1 MiB/s) with 1 file(s) remainingupload: DIGI2-PLATFORM/backups/media/media_2026-05-31_02-30-03.tar.gz to s3://digi2-prod-backups-2026/media/media_2026-05-31_02-30-03.tar.gz
+S3 backup sync completed.
+Completed 456 Bytes/4.0 MiB (9.1 KiB/s) with 6 file(s) remainingupload: DIGI2-PLATFORM/backups/media/backup.log to s3://digi2-prod-backups-2026/media/backup.log
+Completed 456 Bytes/4.0 MiB (9.1 KiB/s) with 5 file(s) remainingCompleted 10.1 KiB/4.0 MiB (119.1 KiB/s) with 5 file(s) remainingupload: DIGI2-PLATFORM/backups/s3-sync.log to s3://digi2-prod-backups-2026/s3-sync.log
+Completed 10.1 KiB/4.0 MiB (119.1 KiB/s) with 4 file(s) remainingCompleted 1.0 MiB/4.0 MiB (10.3 MiB/s) with 4 file(s) remaining  delete: s3://digi2-prod-backups-2026/media/media_2026-05-24_02-30-03.tar.gz
+Completed 1.0 MiB/4.0 MiB (10.3 MiB/s) with 3 file(s) remainingCompleted 2.0 MiB/4.0 MiB (15.5 MiB/s) with 3 file(s) remainingCompleted 2.0 MiB/4.0 MiB (14.0 MiB/s) with 3 file(s) remainingupload: DIGI2-PLATFORM/backups/postgres/backup.log to s3://digi2-prod-backups-2026/postgres/backup.log
+Completed 2.0 MiB/4.0 MiB (14.0 MiB/s) with 2 file(s) remainingCompleted 2.0 MiB/4.0 MiB (13.9 MiB/s) with 2 file(s) remainingupload: DIGI2-PLATFORM/backups/postgres/digi2_db_2026-06-01_02-00-02.sql.gz to s3://digi2-prod-backups-2026/postgres/digi2_db_2026-06-01_02-00-02.sql.gz
+Completed 2.0 MiB/4.0 MiB (13.9 MiB/s) with 1 file(s) remainingupload: DIGI2-PLATFORM/backups/media/media_2026-06-01_02-30-01.tar.gz to s3://digi2-prod-backups-2026/media/media_2026-06-01_02-30-01.tar.gz
+S3 backup sync completed.

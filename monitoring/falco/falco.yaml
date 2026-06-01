@@ -1,0 +1,32 @@
+json_output: true
+json_include_output_property: true
+json_include_tags_property: true
+
+engine:
+  kind: modern_ebpf
+
+plugins:
+  - name: container
+    library_path: libcontainer.so
+    init_config: ""
+
+load_plugins:
+  - container
+
+rules_file:
+  - /etc/falco/falco_rules.yaml
+  - /etc/falco/falco_rules.local.yaml
+  - /etc/falco/rules.d
+
+file_output:
+  enabled: true
+  keep_alive: false
+  filename: /var/log/falco-events.log
+
+stdout_output:
+  enabled: true
+
+syslog_output:
+  enabled: false
+
+priority: notice
