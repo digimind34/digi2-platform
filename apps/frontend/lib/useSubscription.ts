@@ -16,9 +16,19 @@ export function useSubscription() {
     fetch("/api/billing/me/", {
       credentials: "include",
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          setSubscription(null);
+          return null;
+        }
+
+        return res.json();
+      })
       .then((data) => {
-        setSubscription(data);
+        if (data) {
+          setSubscription(data);
+        }
+
         setLoading(false);
       })
       .catch(() => {

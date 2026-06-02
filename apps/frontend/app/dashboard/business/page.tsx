@@ -62,7 +62,13 @@ export default function BusinessDashboardPage() {
             </p>
             <p>
               Status:{" "}
-              <strong>{subscription?.active ? "Active" : "Inactive"}</strong>
+              <strong>
+                {subscription
+                  ? subscription.active
+                    ? "Active"
+                    : "Inactive"
+                  : "Loading..."}
+              </strong>
             </p>
           </div>
 
