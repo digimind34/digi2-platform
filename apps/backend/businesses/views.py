@@ -60,6 +60,21 @@ class ServiceViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         business = BusinessProfile.objects.get(owner=self.request.user)
 
+        subscription = getattr(self.request.user, "subscription", None)
+        plan = getattr(subscription, "plan", "free")
+
+        service_count = Service.objects.filter(business=business).count()
+
+        if plan == "free":
+            raise PermissionDenied(
+                "An active subscription is required to create services."
+            )
+
+        if plan == "starter" and service_count >= 5:
+            raise PermissionDenied(
+                "Starter plan allows up to 5 active services. Upgrade to Pro for unlimited services."
+            )
+
         title = serializer.validated_data.get("title")
         base_slug = slugify(title)
         slug = base_slug
