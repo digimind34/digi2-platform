@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-type Subscription = {
+import { apiRequest } from "@/lib/api";
+
+export type Subscription = {
   plan: string;
   active: boolean;
   stripe_customer_id: string | null;
+  stripe_subscription_id?: string | null;
 };
 
 export function useSubscription() {
@@ -13,28 +16,28 @@ export function useSubscription() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   useEffect(() => {
-    fetch("/api/billing/me/", {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) {
-          setSubscription(null);
-          return null;
-        }
+    let isActive = true;
 
-        return res.json();
-      })
+    apiRequest<Subscription>("/api/billing/me/")
       .then((data) => {
-        if (data) {
+        if (isActive) {
           setSubscription(data);
         }
-
-        setLoading(false);
       })
       .catch(() => {
-        setSubscription(null);
-        setLoading(false);
+        if (isActive) {
+          setSubscription(null);
+        }
+      })
+      .finally(() => {
+        if (isActive) {
+          setLoading(false);
+        }
       });
+
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   const isPremium =

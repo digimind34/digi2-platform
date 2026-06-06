@@ -46,11 +46,17 @@ class PublicBusinessProfileDetailView(generics.RetrieveAPIView):
 
 class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
-    permission_classes = [
-        permissions.IsAuthenticated,
-        RequiresActiveSubscription,
-    ]
+    permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [
+                permissions.IsAuthenticated(),
+                RequiresActiveSubscription(),
+            ]
+
+        return super().get_permissions()
 
     def get_queryset(self):
         return Service.objects.filter(
@@ -63,14 +69,22 @@ class ServiceViewSet(viewsets.ModelViewSet):
         subscription = getattr(self.request.user, "subscription", None)
         plan = getattr(subscription, "plan", "free")
 
-        service_count = Service.objects.filter(business=business).count()
+        active_service_count = Service.objects.filter(
+            business=business,
+            is_active=True,
+        ).count()
+        is_creating_active_service = serializer.validated_data.get("is_active", True)
 
         if plan == "free":
             raise PermissionDenied(
                 "An active subscription is required to create services."
             )
 
-        if plan == "starter" and service_count >= 5:
+        if (
+            plan == "starter"
+            and is_creating_active_service
+            and active_service_count >= 5
+        ):
             raise PermissionDenied(
                 "Starter plan allows up to 5 active services. Upgrade to Pro for unlimited services."
             )
