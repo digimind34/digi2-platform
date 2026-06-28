@@ -44,3 +44,41 @@ certbot/conf/accounts/
 # SSL
 *.pem
 *.key
+
+# =====================================================
+
+# Production Backups
+
+# =====================================================
+
+backups/**/*.sql.gz
+backups/**/*.tar.gz
+backups/**/backup.log
+backups/s3-sync.log
+
+# Temporary restore directories
+
+restore/
+tmp-restore/
+
+# Local runtime artifacts
+
+*.pid
+*.seed
+
+# Local Docker overrides
+
+docker-compose.override.yml
+
+# VS Code workspace cache
+
+.vscode/settings.json
+.vscode/*.log
+
+# Runtime logs
+
+deployment-history/*.log
+
+# Temporary backup files
+
+*.bak
