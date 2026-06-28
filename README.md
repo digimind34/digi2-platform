@@ -572,15 +572,6 @@ These documents define standardized operational procedures for maintaining and r
 
 ![Promtail Logs](docs/images/promtail-logs.png)
 
----
-
-# Architecture Diagram
-
-> Replace this section with your exported architecture diagram.
-
-```
-docs/images/digi2-production-architecture.png
-```
 
 ---
 
@@ -744,7 +735,7 @@ This project can be used to discuss:
 DevOps • Cloud • Platform Engineer
 
 * GitHub: https://github.com/digimind34
-* LinkedIn: *(Add your LinkedIn URL)*
+* LinkedIn: [Babatunde](https://www.linkedin.com/in/babatunde-ayo-devops/)
 * Email: [olaayoire@gmail.com](mailto:olaayoire@gmail.com)
 
 ---
