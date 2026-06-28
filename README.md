@@ -534,66 +534,43 @@ These documents define standardized operational procedures for maintaining and r
 
 ---
 
-# Screenshots
+## Screenshots
 
-> The following screenshots demonstrate the Digi2 Platform running in a production-like environment.
+### Architecture
 
-## Application
+![Digi2 Production Architecture](docs/images/digi2-production-architecture.png)
 
-```
-docs/images/homepage.png
-docs/images/dashboard.png
-docs/images/business-dashboard.png
-docs/images/customer-dashboard.png
-```
+### Monitoring & Observability
 
----
+![Grafana Overview](docs/images/grafana-overview.png)
 
-## Infrastructure
+![Prometheus Targets](docs/images/prometheus-targets.png)
 
-```
-docs/images/nginx-https.png
-docs/images/docker-containers.png
-docs/images/docker-health.png
-```
+![Node Exporter Dashboard](docs/images/node-exporter-dashboard.png)
 
----
+![PostgreSQL Dashboard](docs/images/postgres-dashboard.png)
 
-## Monitoring
+![Loki Logs](docs/images/loki-logs.png)
 
-```
-docs/images/grafana-overview.png
-docs/images/prometheus-targets.png
-docs/images/postgres-dashboard.png
-docs/images/container-dashboard.png
-docs/images/ssl-dashboard.png
-docs/images/runtime-security-dashboard.png
-```
+### Alerting
 
----
+![Grafana Alert Rules](docs/images/grafana-alert-rules.png)
 
-## Logging
+![Grafana Contact Points](docs/images/grafana-contact-points.png)
 
-```
-docs/images/loki-dashboard.png
-docs/images/promtail-logs.png
-```
+![Grafana Notification Policies](docs/images/grafana-notification-policies.png)
 
----
+### Infrastructure
 
-## Tracing
+![Docker Networks](docs/images/docker-networks.png)
 
-```
-docs/images/tempo-traces.png
-```
+![Docker Volumes](docs/images/docker-volumes.png)
 
----
+![Backup Structure](docs/images/backup-structure.png)
 
-## Runtime Security
+![Runbooks](docs/images/runbooks.png)
 
-```
-docs/images/falco-events.png
-```
+![Promtail Logs](docs/images/promtail-logs.png)
 
 ---
 
