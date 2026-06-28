@@ -550,8 +550,6 @@ These documents define standardized operational procedures for maintaining and r
 
 ![PostgreSQL Dashboard](docs/images/postgres-dashboard.png)
 
-![PostgreSQL Full Dashboard](docs/images/postgres-dashboard-full.png)
-
 ![Loki Logs](docs/images/loki-logs.png)
 
 ### Alerting
