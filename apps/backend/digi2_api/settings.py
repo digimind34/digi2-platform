@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "corsheaders",
+    "anymail",
 
     # Digi2 business app
     "businesses",
@@ -296,3 +297,35 @@ if env_bool("OTEL_MANUAL_INSTRUMENTATION_ENABLED", "False"):
         initialize_otel()
     except Exception as e:
         print("OpenTelemetry init failed:", e)
+
+# Amazon SES email configuration
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "anymail.backends.amazon_ses.EmailBackend",
+)
+
+AWS_SES_REGION_NAME = os.getenv(
+    "AWS_SES_REGION_NAME",
+    "us-east-1",
+)
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "Digi2 <noreply@digi2.site>",
+)
+
+SERVER_EMAIL = os.getenv(
+    "SERVER_EMAIL",
+    "Digi2 System <noreply@digi2.site>",
+)
+
+SUPPORT_EMAIL = os.getenv(
+    "SUPPORT_EMAIL",
+    "support@digi2.site",
+)
+
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        "region_name": AWS_SES_REGION_NAME,
+    }
+}
