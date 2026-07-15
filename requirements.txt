@@ -65,4 +65,3 @@ urllib3==2.6.3
 Werkzeug==3.1.8
 wheel==0.46.3
 whitenoise==6.12.0
-django-anymail[amazon-ses]==15.0
