@@ -678,7 +678,7 @@ Planned improvements include:
 
 ---
 
-# Interview Talking Points
+# Talking Points
 
 This project can be used to discuss:
 
